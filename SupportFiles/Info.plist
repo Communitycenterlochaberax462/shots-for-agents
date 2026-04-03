@@ -22,6 +22,8 @@
     <true/>
     <key>NSHighResolutionCapable</key>
     <true/>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.utilities</string>
     <key>NSScreenCaptureUsageDescription</key>
     <string>ShotsForAgents needs Screen Recording permission to capture screenshots.</string>
 </dict>
