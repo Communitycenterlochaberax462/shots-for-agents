@@ -90,7 +90,7 @@ Click the menu bar icon → **Settings** to configure:
 - **KeyboardShortcuts** — Global hotkey registration without requiring Accessibility permissions.
 - **In-memory store** — Screenshots are never written to disk. An actor-based store handles concurrent access.
 
-Sandboxed and ready for Mac App Store. Only permission required is **Screen Recording**.
+Only permission required is **Screen Recording**.
 
 ## Dependencies
 
