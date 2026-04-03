@@ -11,7 +11,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var sweepTask: Task<Void, Never>?
 
     // Batch capture state
-    private var batch: [(index: Int, curl: String)] = []
+    private var captures: [CaptureEntry] = []
+    private var nextIndex = 1
     private var batchResetTask: Task<Void, Never>?
     private var toastWindow: CaptureToastWindow?
     private var annotationWindow: AnnotationWindow?
@@ -33,6 +34,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarController.onClearBatch = { [weak self] in
             self?.clearBatch()
         }
+        statusBarController.onRemoveCapture = { [weak self] id in
+            self?.removeCapture(id: id)
+        }
+        statusBarController.onEditAnnotation = { [weak self] id in
+            self?.editAnnotation(id: id)
+        }
 
         settingsWindowController = SettingsWindowController()
         statusBarController.onSettings = { [weak self] in
@@ -45,10 +52,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         // TTL sweep — clean expired screenshots every 30s
-        sweepTask = Task { [imageStore] in
+        sweepTask = Task { [imageStore, weak self] in
             while !Task.isCancelled {
                 try? await Task.sleep(for: .seconds(30))
                 await imageStore.sweepExpired()
+                let activeIDs = await imageStore.activeIDs()
+                await MainActor.run {
+                    self?.syncCaptures(activeIDs: activeIDs)
+                }
             }
         }
     }
@@ -82,23 +93,101 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             let url = "http://localhost:\(Constants.port)/s/\(id.uuidString).png"
             let curlCommand = "curl -s -o /tmp/\(filename) \(url)"
 
-            // Add to batch
-            let index = batch.count + 1
-            batch.append((index: index, curl: curlCommand))
+            // Build entry with thumbnail from raw (unannotated) image
+            let thumbnail = StatusBarController.makeThumbnail(from: rawData)
+            let index = nextIndex
+            nextIndex += 1
+            let entry = CaptureEntry(
+                id: id,
+                index: index,
+                rawData: rawData,
+                annotation: annotation,
+                thumbnail: thumbnail,
+                curl: curlCommand
+            )
+            captures.append(entry)
+
             copyBatchToClipboard()
-            statusBarController.updateBatch(count: batch.count)
+            statusBarController.updateCaptures(captures)
             resetBatchTimer()
             showCaptureToast()
         }
     }
 
+    private func removeCapture(id: UUID) {
+        captures.removeAll { $0.id == id }
+        Task { await imageStore.remove(id) }
+
+        if captures.isEmpty {
+            clearBatch()
+        } else {
+            copyBatchToClipboard()
+            statusBarController.updateCaptures(captures)
+        }
+    }
+
+    private func editAnnotation(id: UUID) {
+        guard let idx = captures.firstIndex(where: { $0.id == id }) else { return }
+        let entry = captures[idx]
+
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+
+            let newAnnotation: String? = await withCheckedContinuation { continuation in
+                let screenCenter = NSPoint(
+                    x: NSScreen.main?.frame.midX ?? 500,
+                    y: NSScreen.main?.frame.midY ?? 400
+                )
+                let window = AnnotationWindow(
+                    anchorPoint: screenCenter,
+                    initialText: entry.annotation
+                ) { text in
+                    continuation.resume(returning: text)
+                }
+                self.annotationWindow = window
+                window.show()
+            }
+            self.annotationWindow = nil
+
+            // Re-burn annotation onto the raw image
+            let newData: Data
+            if let newAnnotation, !newAnnotation.isEmpty {
+                newData = ImageAnnotator.annotate(pngData: entry.rawData, text: newAnnotation)
+            } else {
+                newData = entry.rawData
+            }
+
+            // Update store and local entry
+            await self.imageStore.replace(id, data: newData)
+            if let idx = self.captures.firstIndex(where: { $0.id == id }) {
+                self.captures[idx].annotation = newAnnotation
+            }
+            self.copyBatchToClipboard()
+            self.statusBarController.updateCaptures(self.captures)
+        }
+    }
+
+    /// Remove local entries that the store has swept (read by AI or expired)
+    private func syncCaptures(activeIDs: Set<UUID>) {
+        let before = captures.count
+        captures.removeAll { !activeIDs.contains($0.id) }
+        if captures.count != before {
+            if captures.isEmpty {
+                clearBatch()
+            } else {
+                copyBatchToClipboard()
+                statusBarController.updateCaptures(captures)
+            }
+        }
+    }
+
     private func copyBatchToClipboard() {
-        if batch.count == 1 {
-            ClipboardHelper.copy(batch[0].curl)
+        if captures.count == 1 {
+            ClipboardHelper.copy(captures[0].curl)
         } else {
             var table = "| Screenshot | Fetch |\n"
             table += "|------------|-------|\n"
-            for entry in batch {
+            for entry in captures {
                 table += "| shot-\(entry.index) | `\(entry.curl)` |\n"
             }
             ClipboardHelper.copy(table)
@@ -118,7 +207,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func showCaptureToast() {
         toastWindow?.dismiss()
-        let toast = CaptureToastWindow(shotCount: batch.count) { [weak self] in
+        let toast = CaptureToastWindow(shotCount: captures.count) { [weak self] in
             self?.captureAndServe()
         }
         toastWindow = toast
@@ -126,10 +215,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func clearBatch() {
-        batch.removeAll()
+        captures.removeAll()
+        nextIndex = 1
         batchResetTask?.cancel()
         batchResetTask = nil
-        statusBarController.updateBatch(count: 0)
+        statusBarController.updateCaptures([])
     }
 
     func applicationWillTerminate(_ notification: Notification) {

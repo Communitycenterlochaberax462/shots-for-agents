@@ -11,6 +11,8 @@ import {
   Desktop,
   HardDrive,
   Gear,
+  NotePencil,
+  Images,
 } from "@phosphor-icons/react/dist/ssr"
 
 function TerminalBlock({
@@ -136,7 +138,8 @@ export default function Page() {
                 <kbd className="rounded border border-border/50 bg-muted px-1.5 py-0.5 text-xs">
                   Ctrl+Shift+S
                 </kbd>{" "}
-                → select a region. Take as many as you need.
+                → select a region, add a note for context. Take as many as you
+                need.
               </Step>
 
               <Step number={2} title="Paste">
@@ -227,7 +230,7 @@ export default function Page() {
             <FeatureCard
               icon={<Eye size={20} />}
               title="Menu bar only"
-              description="No dock icon, no windows. Lives in your menu bar, out of the way until you need it."
+              description="Lives in your menu bar with thumbnail previews of recent captures. Edit annotations or remove shots before pasting."
             />
             <FeatureCard
               icon={<HardDrive size={20} />}
@@ -248,6 +251,16 @@ export default function Page() {
               icon={<Gear size={20} />}
               title="Configurable"
               description="Change the port, expiry times, capture shortcut, and launch-at-login from the settings window."
+            />
+            <FeatureCard
+              icon={<NotePencil size={20} />}
+              title="Annotations"
+              description="Add a note after each capture to tell the AI what to look at. Edit or remove annotations anytime before pasting."
+            />
+            <FeatureCard
+              icon={<Images size={20} />}
+              title="Capture management"
+              description="Preview, edit, and remove individual captures from the menu bar. Captures auto-clear once the AI reads them."
             />
             <FeatureCard
               icon={<GithubLogo size={20} />}

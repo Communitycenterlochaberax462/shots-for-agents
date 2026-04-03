@@ -4,6 +4,7 @@ import AppKit
 final class SelectionOverlayWindow: NSWindow {
     private let completionHandler: (CGRect?) -> Void
     private var didComplete = false
+    nonisolated(unsafe) private var globalEscMonitor: Any?
 
     init(screenshot: CGImage, displayFrame: CGRect, onComplete: @escaping (CGRect?) -> Void) {
         self.completionHandler = onComplete
@@ -35,12 +36,23 @@ final class SelectionOverlayWindow: NSWindow {
 
     func show() {
         makeKeyAndOrderFront(nil)
-        NSApp.activate()
+        NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
+
+        // Global monitor catches ESC even when the window isn't key (e.g. launched from Xcode)
+        globalEscMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            if event.keyCode == 53 {
+                DispatchQueue.main.async { self?.complete(nil) }
+            }
+        }
     }
 
     func complete(_ rect: CGRect?) {
         guard !didComplete else { return }
         didComplete = true
+        if let monitor = globalEscMonitor {
+            NSEvent.removeMonitor(monitor)
+            globalEscMonitor = nil
+        }
         (contentView as? SelectionOverlayView)?.removeKeyMonitors()
         completionHandler(rect)
     }

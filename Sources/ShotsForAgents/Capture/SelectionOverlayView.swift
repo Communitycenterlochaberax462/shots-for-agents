@@ -13,11 +13,39 @@ final class SelectionOverlayView: NSView {
     nonisolated(unsafe) private var keyDownMonitor: Any?
     nonisolated(unsafe) private var keyUpMonitor: Any?
 
+    private let closeButton: NSButton
+
     init(screenshot: CGImage, frame: NSRect, onComplete: @escaping (CGRect?) -> Void) {
         self.screenshot = screenshot
         self.onComplete = onComplete
         self.cachedImage = NSImage(cgImage: screenshot, size: frame.size)
+
+        // Close button — top-left corner
+        let button = NSButton(frame: .zero)
+        button.bezelStyle = .regularSquare
+        button.isBordered = false
+        button.image = NSImage(
+            systemSymbolName: "xmark.circle.fill",
+            accessibilityDescription: "Close"
+        )?.withSymbolConfiguration(
+            .init(pointSize: 20, weight: .medium)
+        )
+        button.contentTintColor = .white
+        button.imagePosition = .imageOnly
+        button.setButtonType(.momentaryChange)
+        self.closeButton = button
+
         super.init(frame: frame)
+
+        button.target = self
+        button.action = #selector(closeButtonTapped)
+        button.sizeToFit()
+        // Position in top-left with padding
+        let padding: CGFloat = 16
+        button.frame.origin = CGPoint(x: padding, y: frame.height - button.frame.height - padding)
+        addSubview(button)
+
+        // Tracking area for crosshair guides
         addTrackingArea(NSTrackingArea(
             rect: .zero,
             options: [.mouseMoved, .activeAlways, .inVisibleRect],
@@ -35,6 +63,11 @@ final class SelectionOverlayView: NSView {
 
     override func resetCursorRects() {
         addCursorRect(bounds, cursor: .crosshair)
+        addCursorRect(closeButton.frame, cursor: .arrow)
+    }
+
+    @objc private func closeButtonTapped() {
+        onComplete(nil)
     }
 
     // MARK: - Drawing
@@ -115,7 +148,10 @@ final class SelectionOverlayView: NSView {
     }
 
     override func mouseDown(with event: NSEvent) {
-        startPoint = convert(event.locationInWindow, from: nil)
+        let point = convert(event.locationInWindow, from: nil)
+        // Don't start a selection when clicking the close button
+        if closeButton.frame.contains(point) { return }
+        startPoint = point
         currentSelection = nil
         mouseLocation = nil
         needsDisplay = true
