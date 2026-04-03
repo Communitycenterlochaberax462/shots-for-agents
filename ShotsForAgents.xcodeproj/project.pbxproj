@@ -12,6 +12,7 @@
 		45A68852E10255C4620D2B3C /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = AF0BD7BDC3C49B155BCAFBDB /* KeyboardShortcuts */; };
 		4C121941F1CD8D19C05CCF08 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EE5596C20D3EE7C2DFE63C /* main.swift */; };
 		53009A2F454B9DC51EA4951D /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD6C4F9A64434CCB4DDA94D /* ImageStore.swift */; };
+		59BB2AF3DCA47BC1C9F6ED65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D24C23DE8916E7AE662F84D /* Assets.xcassets */; };
 		59E671723BE04CCD13FE07E5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A2288E138E47D8807DE6F9 /* SettingsView.swift */; };
 		6430EABFDEEBE8DAD52ABF1C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A0F72DB642507FCAC3EAD /* Constants.swift */; };
 		7FB2D5910369EC70F1DF3AE6 /* ScreenCaptureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984F25D8C448E54F360877F9 /* ScreenCaptureService.swift */; };
@@ -27,6 +28,7 @@
 /* Begin PBXFileReference section */
 		098A3D8FDB1C67FEE648D4B6 /* StatusBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarController.swift; sourceTree = "<group>"; };
 		11A2288E138E47D8807DE6F9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2D24C23DE8916E7AE662F84D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3C93E561C541340197E2B1ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4BD6C4F9A64434CCB4DDA94D /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
 		56F01C975EC4F24AA08B94A0 /* SelectionOverlayWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionOverlayWindow.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 		DA6E8FCF15BFBFF2CF8F74BE /* ShotsForAgents */ = {
 			isa = PBXGroup;
 			children = (
+				2D24C23DE8916E7AE662F84D /* Assets.xcassets */,
 				61BA7B8CE5B6598A40F623CA /* App */,
 				C68CAE5703145A5A1A77429F /* Capture */,
 				D7B3BF2543F794D6B0CB8FBC /* HotKey */,
@@ -154,6 +157,7 @@
 			buildConfigurationList = 1C22F230A7CFBA3F044D7B12 /* Build configuration list for PBXNativeTarget "ShotsForAgents" */;
 			buildPhases = (
 				CE489C4899D6ABC0823321CD /* Sources */,
+				A339D77ADADF5E1AB06B962F /* Resources */,
 				BD2DACC9174AF0FFD0E0790C /* Frameworks */,
 			);
 			buildRules = (
@@ -205,6 +209,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A339D77ADADF5E1AB06B962F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				59BB2AF3DCA47BC1C9F6ED65 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CE489C4899D6ABC0823321CD /* Sources */ = {
