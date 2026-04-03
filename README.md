@@ -1,6 +1,6 @@
 # Shots for Agents
 
-A Mac menu bar utility that turns screenshots into ephemeral localhost URLs you can paste into AI agents.
+A Mac menu bar utility that turns screenshots into one-time localhost URLs you can paste into AI agents.
 
 ## The Problem
 
