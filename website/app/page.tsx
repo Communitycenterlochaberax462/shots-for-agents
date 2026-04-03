@@ -274,6 +274,10 @@ export default function Page() {
               GitHub
             </a>
             <span className="text-border">·</span>
+            <a href="/privacy" className="transition-colors hover:text-foreground">
+              Privacy
+            </a>
+            <span className="text-border">·</span>
             <span>MIT License</span>
             <span className="text-border">·</span>
             <span>macOS 14+</span>
