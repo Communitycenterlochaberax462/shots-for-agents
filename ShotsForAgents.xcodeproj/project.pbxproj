@@ -3,17 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		12A3460C0E825A85F3A0FC38 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C93E561C541340197E2B1ED /* AppDelegate.swift */; };
+		1CE12DD7B707EF18538792C6 /* ImageAnnotator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0B93DB9AC952DF3ECE8B77 /* ImageAnnotator.swift */; };
 		1DB36E6DE8A9096ECDA4DDAD /* FlyingFox in Frameworks */ = {isa = PBXBuildFile; productRef = 74AC0BFC52825A9808CA84DD /* FlyingFox */; };
+		390E7AC7C4F45C06A7175770 /* CaptureToastWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A93CCEAA3D41DC413A7051 /* CaptureToastWindow.swift */; };
 		45A68852E10255C4620D2B3C /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = AF0BD7BDC3C49B155BCAFBDB /* KeyboardShortcuts */; };
 		4C121941F1CD8D19C05CCF08 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5EE5596C20D3EE7C2DFE63C /* main.swift */; };
 		53009A2F454B9DC51EA4951D /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD6C4F9A64434CCB4DDA94D /* ImageStore.swift */; };
 		59BB2AF3DCA47BC1C9F6ED65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D24C23DE8916E7AE662F84D /* Assets.xcassets */; };
 		59E671723BE04CCD13FE07E5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A2288E138E47D8807DE6F9 /* SettingsView.swift */; };
+		6119AA4F7B310A8CEED890AE /* AnnotationWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAAA26F3F73A090E7ABF1377 /* AnnotationWindow.swift */; };
 		6430EABFDEEBE8DAD52ABF1C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A0F72DB642507FCAC3EAD /* Constants.swift */; };
 		7FB2D5910369EC70F1DF3AE6 /* ScreenCaptureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984F25D8C448E54F360877F9 /* ScreenCaptureService.swift */; };
 		8973002EEE341DCEB13A884E /* ClipboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8E5D8F520171F426DBB039 /* ClipboardHelper.swift */; };
@@ -38,9 +41,12 @@
 		97A6CA28EC9266761E20AB78 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		984F25D8C448E54F360877F9 /* ScreenCaptureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCaptureService.swift; sourceTree = "<group>"; };
 		A76A0F72DB642507FCAC3EAD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		BAAA26F3F73A090E7ABF1377 /* AnnotationWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationWindow.swift; sourceTree = "<group>"; };
 		BC8E5D8F520171F426DBB039 /* ClipboardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardHelper.swift; sourceTree = "<group>"; };
 		D224723C0303814513D51140 /* ImageServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageServer.swift; sourceTree = "<group>"; };
 		D5EE5596C20D3EE7C2DFE63C /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		E6A93CCEAA3D41DC413A7051 /* CaptureToastWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureToastWindow.swift; sourceTree = "<group>"; };
+		FD0B93DB9AC952DF3ECE8B77 /* ImageAnnotator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAnnotator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +108,9 @@
 		C68CAE5703145A5A1A77429F /* Capture */ = {
 			isa = PBXGroup;
 			children = (
+				BAAA26F3F73A090E7ABF1377 /* AnnotationWindow.swift */,
+				E6A93CCEAA3D41DC413A7051 /* CaptureToastWindow.swift */,
+				FD0B93DB9AC952DF3ECE8B77 /* ImageAnnotator.swift */,
 				984F25D8C448E54F360877F9 /* ScreenCaptureService.swift */,
 				83A13B9E3F5551A39F1A2F10 /* SelectionOverlayView.swift */,
 				56F01C975EC4F24AA08B94A0 /* SelectionOverlayWindow.swift */,
@@ -181,6 +190,11 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					80F3412073C341DB0A681875 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = E43E2803C349B20F6FC0B975 /* Build configuration list for PBXProject "ShotsForAgents" */;
 			compatibilityVersion = "Xcode 14.0";
@@ -196,6 +210,7 @@
 				CC5903403AC38E2EDD776697 /* XCRemoteSwiftPackageReference "FlyingFox" */,
 				7917F24B011DE6220F0C4E21 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 			);
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -220,9 +235,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6119AA4F7B310A8CEED890AE /* AnnotationWindow.swift in Sources */,
 				12A3460C0E825A85F3A0FC38 /* AppDelegate.swift in Sources */,
+				390E7AC7C4F45C06A7175770 /* CaptureToastWindow.swift in Sources */,
 				8973002EEE341DCEB13A884E /* ClipboardHelper.swift in Sources */,
 				6430EABFDEEBE8DAD52ABF1C /* Constants.swift in Sources */,
+				1CE12DD7B707EF18538792C6 /* ImageAnnotator.swift in Sources */,
 				FF718AD53BA29450B4E7F057 /* ImageServer.swift in Sources */,
 				53009A2F454B9DC51EA4951D /* ImageStore.swift in Sources */,
 				7FB2D5910369EC70F1DF3AE6 /* ScreenCaptureService.swift in Sources */,
@@ -300,12 +318,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SupportFiles/ShotsForAgents.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = 2CR2S9WY45;
+				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = SupportFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -315,7 +330,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.shotsforagents.app;
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 6.0;
 			};
@@ -389,12 +403,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = SupportFiles/ShotsForAgents.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = 2CR2S9WY45;
+				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = SupportFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -404,7 +415,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.shotsforagents.app;
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 6.0;
 			};

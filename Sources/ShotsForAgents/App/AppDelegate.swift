@@ -13,6 +13,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // Batch capture state
     private var batch: [(index: Int, curl: String)] = []
     private var batchResetTask: Task<Void, Never>?
+    private var toastWindow: CaptureToastWindow?
+    private var annotationWindow: AnnotationWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         Constants.registerDefaults()
@@ -54,7 +56,27 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func captureAndServe() {
         Task { @MainActor [weak self] in
             guard let self else { return }
-            guard let data = await ScreenCaptureService.captureRegion() else { return }
+            guard let rawData = await ScreenCaptureService.captureRegion() else { return }
+
+            // Show annotation prompt at screen center
+            let annotation: String? = await withCheckedContinuation { continuation in
+                let screenCenter = NSEvent.mouseLocation
+                let window = AnnotationWindow(anchorPoint: screenCenter) { text in
+                    continuation.resume(returning: text)
+                }
+                self.annotationWindow = window
+                window.show()
+            }
+            self.annotationWindow = nil
+
+            // Burn annotation into image if provided
+            let data: Data
+            if let annotation, !annotation.isEmpty {
+                data = ImageAnnotator.annotate(pngData: rawData, text: annotation)
+            } else {
+                data = rawData
+            }
+
             let id = await imageStore.store(data)
             let filename = "shot-\(id.uuidString.prefix(8)).png"
             let url = "http://localhost:\(Constants.port)/s/\(id.uuidString).png"
@@ -65,8 +87,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             batch.append((index: index, curl: curlCommand))
             copyBatchToClipboard()
             statusBarController.updateBatch(count: batch.count)
-            statusBarController.addRecentURL(url)
             resetBatchTimer()
+            showCaptureToast()
         }
     }
 
@@ -92,6 +114,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 self?.clearBatch()
             }
         }
+    }
+
+    private func showCaptureToast() {
+        toastWindow?.dismiss()
+        let toast = CaptureToastWindow(shotCount: batch.count) { [weak self] in
+            self?.captureAndServe()
+        }
+        toastWindow = toast
+        toast.show()
     }
 
     private func clearBatch() {

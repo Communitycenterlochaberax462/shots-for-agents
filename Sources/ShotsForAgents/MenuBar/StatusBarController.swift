@@ -6,7 +6,6 @@ final class StatusBarController: NSObject {
     var onCapture: (() -> Void)?
     var onClearBatch: (() -> Void)?
     var onSettings: (() -> Void)?
-    private var recentURLs: [String] = []
     private var batchCount = 0
 
     override init() {
@@ -18,14 +17,6 @@ final class StatusBarController: NSObject {
                 systemSymbolName: "camera.viewfinder",
                 accessibilityDescription: "Oneshot"
             )
-        }
-        rebuildMenu()
-    }
-
-    func addRecentURL(_ url: String) {
-        recentURLs.insert(url, at: 0)
-        if recentURLs.count > 10 {
-            recentURLs.removeLast()
         }
         rebuildMenu()
     }
@@ -72,29 +63,6 @@ final class StatusBarController: NSObject {
             menu.addItem(clearItem)
         }
 
-        if !recentURLs.isEmpty {
-            menu.addItem(NSMenuItem.separator())
-
-            let header = NSMenuItem(title: "Recent", action: nil, keyEquivalent: "")
-            header.isEnabled = false
-            menu.addItem(header)
-
-            for (index, url) in recentURLs.enumerated() {
-                let displayURL = url.count > 50
-                    ? "..." + url.suffix(47)
-                    : url
-                let item = NSMenuItem(
-                    title: displayURL,
-                    action: #selector(copyURL(_:)),
-                    keyEquivalent: ""
-                )
-                item.target = self
-                item.tag = index
-                item.representedObject = url as NSString
-                menu.addItem(item)
-            }
-        }
-
         menu.addItem(NSMenuItem.separator())
 
         let settingsItem = NSMenuItem(
@@ -128,12 +96,6 @@ final class StatusBarController: NSObject {
 
     @objc private func handleSettings() {
         onSettings?()
-    }
-
-    @objc private func copyURL(_ sender: NSMenuItem) {
-        if let url = sender.representedObject as? String {
-            ClipboardHelper.copy(url)
-        }
     }
 
     @objc private func handleQuit() {
