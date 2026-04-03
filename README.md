@@ -12,12 +12,12 @@ macOS has no concept of a "temporary screenshot." Every capture is permanent unt
 
 ## How It Works
 
-Oneshot sits in your menu bar. Press a shortcut, select a region, and get a curl command on your clipboard. Curl instead of a URL because AI agents can't fetch localhost with their web tools, but they can run shell commands.
+Oneshot sits in your menu bar. Press a shortcut, select a region, add an optional annotation for context, and get a curl command on your clipboard. Curl instead of a URL because AI agents can't fetch localhost with their web tools, but they can run shell commands.
 
 ### Single Screenshot
 
 ```
-⌃⇧S → Select Region → curl command copied → Paste into agent → Agent reads it → Gone. 410.
+⌃⇧S → Select Region → Add Note (optional) → curl command copied → Paste into agent → Agent reads it → Gone. 410.
 ```
 
 **Clipboard result:**
@@ -45,6 +45,12 @@ Keep pressing the shortcut — each capture adds to a batch. The clipboard updat
 | shot-3 | `curl -s -o /tmp/shot-I9J0K1L2.png http://localhost:9853/s/...` |
 
 Paste the table into your agent and it fetches all screenshots at once. The batch auto-clears after 30 seconds of inactivity, or clear it from the menu bar.
+
+### Annotations & Capture Management
+
+After selecting a region, a prompt appears to add a note — tell the AI what to look at. The annotation gets burned into the bottom of the image so it travels with the screenshot.
+
+From the menu bar, you can see thumbnail previews of recent captures, edit annotations, or remove individual shots before pasting. Captures auto-clear once the AI reads them.
 
 ### Expiry
 
