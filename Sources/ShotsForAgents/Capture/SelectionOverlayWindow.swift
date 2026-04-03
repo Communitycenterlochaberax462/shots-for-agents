@@ -41,6 +41,7 @@ final class SelectionOverlayWindow: NSWindow {
     func complete(_ rect: CGRect?) {
         guard !didComplete else { return }
         didComplete = true
+        (contentView as? SelectionOverlayView)?.removeKeyMonitors()
         completionHandler(rect)
     }
 

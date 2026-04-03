@@ -4,9 +4,30 @@ import ScreenCaptureKit
 @MainActor
 final class ScreenCaptureService {
     private static var overlayWindow: SelectionOverlayWindow?
+    private static var hasCheckedPermission = false
+
+    /// Ensures Screen Recording permission is granted before capturing.
+    /// Returns false if the user hasn't granted permission.
+    private static func ensurePermission() async -> Bool {
+        // SCShareableContent.current triggers the permission prompt if needed.
+        // We call it once early to avoid double prompts from both
+        // SCShareableContent and SCScreenshotManager.
+        do {
+            _ = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
+            hasCheckedPermission = true
+            return true
+        } catch {
+            return false
+        }
+    }
 
     static func captureRegion() async -> Data? {
-        // 1. Get available displays
+        // 1. Ensure permission (single prompt, cached after first grant)
+        if !hasCheckedPermission {
+            guard await ensurePermission() else { return nil }
+        }
+
+        // 2. Get available displays
         guard let content = try? await SCShareableContent.excludingDesktopWindows(
             false, onScreenWindowsOnly: true
         ) else {
@@ -21,7 +42,7 @@ final class ScreenCaptureService {
 
         guard let display else { return nil }
 
-        // 2. Capture the full display (freeze frame)
+        // 3. Capture the full display (freeze frame)
         let filter = SCContentFilter(display: display, excludingWindows: [])
         let config = SCStreamConfiguration()
         config.width = display.width
@@ -34,7 +55,7 @@ final class ScreenCaptureService {
             return nil
         }
 
-        // 3. Show selection overlay on the frozen screenshot
+        // 4. Show selection overlay on the frozen screenshot
         let selectedRect: CGRect? = await withCheckedContinuation { continuation in
             let window = SelectionOverlayWindow(
                 screenshot: screenshot,
@@ -52,7 +73,7 @@ final class ScreenCaptureService {
             return nil
         }
 
-        // 4. Crop to selection
+        // 5. Crop to selection
         // View coordinates: origin bottom-left (AppKit)
         // CGImage coordinates: origin top-left
         let displayFrame = display.frame
@@ -68,7 +89,7 @@ final class ScreenCaptureService {
 
         guard let cropped = screenshot.cropping(to: cropRect) else { return nil }
 
-        // 5. Convert to PNG
+        // 6. Convert to PNG
         let rep = NSBitmapImageRep(cgImage: cropped)
         return rep.representation(using: .png, properties: [:])
     }
