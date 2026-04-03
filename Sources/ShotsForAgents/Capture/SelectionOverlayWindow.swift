@@ -35,7 +35,7 @@ final class SelectionOverlayWindow: NSWindow {
 
     func show() {
         makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
+        NSApp.activate()
     }
 
     func complete(_ rect: CGRect?) {

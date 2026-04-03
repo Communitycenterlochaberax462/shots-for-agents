@@ -27,7 +27,7 @@ struct SettingsView: View {
                 Section("Server") {
                     LabeledContent("Port") {
                         HStack(spacing: 6) {
-                            TextField("", text: $portText)
+                            TextField("Port", text: $portText)
                                 .frame(width: 52)
                                 .textFieldStyle(.roundedBorder)
                                 .font(.system(.body, design: .monospaced))

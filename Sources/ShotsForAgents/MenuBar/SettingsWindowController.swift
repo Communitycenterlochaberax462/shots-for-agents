@@ -8,7 +8,7 @@ final class SettingsWindowController {
     func show() {
         if let window = window {
             window.makeKeyAndOrderFront(nil)
-            NSApp.activate(ignoringOtherApps: true)
+            NSApp.activate()
             return
         }
 
@@ -24,7 +24,7 @@ final class SettingsWindowController {
         window.isReleasedWhenClosed = false
         window.titlebarAppearsTransparent = false
         window.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
+        NSApp.activate()
 
         self.window = window
     }
