@@ -13,7 +13,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // Batch capture state
     private var captures: [CaptureEntry] = []
     private var nextIndex = 1
-    private var batchResetTask: Task<Void, Never>?
     private var toastWindow: CaptureToastWindow?
     private var annotationWindow: AnnotationWindow?
 
@@ -109,7 +108,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
             copyBatchToClipboard()
             statusBarController.updateCaptures(captures)
-            resetBatchTimer()
             showCaptureToast()
         }
     }
@@ -194,17 +192,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private func resetBatchTimer() {
-        batchResetTask?.cancel()
-        batchResetTask = Task { [weak self] in
-            try? await Task.sleep(for: .seconds(30))
-            guard !Task.isCancelled else { return }
-            await MainActor.run {
-                self?.clearBatch()
-            }
-        }
-    }
-
     private func showCaptureToast() {
         toastWindow?.dismiss()
         let toast = CaptureToastWindow(shotCount: captures.count) { [weak self] in
@@ -217,14 +204,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func clearBatch() {
         captures.removeAll()
         nextIndex = 1
-        batchResetTask?.cancel()
-        batchResetTask = nil
         statusBarController.updateCaptures([])
     }
 
     func applicationWillTerminate(_ notification: Notification) {
         serverTask?.cancel()
         sweepTask?.cancel()
-        batchResetTask?.cancel()
     }
 }
