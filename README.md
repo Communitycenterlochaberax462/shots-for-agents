@@ -2,9 +2,7 @@
 
 ![Oneshot](social.jpg)
 
-Share screenshots with AI agents without pasting base64 walls into chat.
-
-Oneshot is a Mac menu bar app that gives [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Cursor](https://www.cursor.com/), [GitHub Copilot](https://github.com/features/copilot), and other AI coding agents a way to see your screen. Screenshot a region, paste the command into chat, and the agent reads it. Then it's gone.
+Share screenshots with AI agents without pasting base64 images into chat.
 ---
 
 ## Why Oneshot?
