@@ -67,7 +67,7 @@ struct SettingsView: View {
             .scrollDisabled(true)
 
             HStack {
-                Text("Shots for Agents v\(version)")
+                Text("Oneshot v\(version)")
                     .font(.footnote)
                     .foregroundStyle(.tertiary)
                 Spacer()

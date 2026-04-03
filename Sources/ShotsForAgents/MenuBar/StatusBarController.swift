@@ -16,7 +16,7 @@ final class StatusBarController: NSObject {
         if let button = statusItem.button {
             button.image = NSImage(
                 systemSymbolName: "camera.viewfinder",
-                accessibilityDescription: "Shots for Agents"
+                accessibilityDescription: "Oneshot"
             )
         }
         rebuildMenu()
@@ -108,7 +108,7 @@ final class StatusBarController: NSObject {
         menu.addItem(NSMenuItem.separator())
 
         let quitItem = NSMenuItem(
-            title: "Quit Shots for Agents",
+            title: "Quit Oneshot",
             action: #selector(handleQuit),
             keyEquivalent: "q"
         )
