@@ -2,39 +2,49 @@
 
 ![Oneshot](social.jpg)
 
-A Mac menu bar utility that turns screenshots into one-time localhost URLs you can paste into AI agents.
+Share screenshots with AI agents without pasting base64 walls into chat.
 
-## The Problem
+Oneshot is a Mac menu bar app that gives [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Cursor](https://www.cursor.com/), [GitHub Copilot](https://github.com/features/copilot), and other AI coding agents a way to see your screen. Screenshot a region, paste the command into chat, and the agent reads it. Then it's gone.
 
-AI agents can run shell commands but can't see your screen. Sharing screenshots means pasting large base64 images into chat and typing out what to look at — burning tokens and cluttering context. Sharing multiple screenshots makes it worse.
+[oneshot.zip](https://oneshot.zip)
 
-## How It Works
+---
 
-Oneshot sits in your menu bar. Press a shortcut, select a region, add an optional annotation for context, and get a curl command on your clipboard. Curl instead of a URL because AI agents can't fetch localhost with their web tools, but they can run shell commands.
+## Why Oneshot?
 
-### Single Screenshot
+AI agents can run shell commands, but they can't see your screen. The usual workaround — encoding a screenshot as base64 and pasting it into chat — wastes tokens and bloats context. It gets worse when you need to share more than one image.
 
-```
-⌃⇧S → Select Region → Add Note (optional) → curl command copied → Paste into agent → Agent reads it → Gone. 410.
-```
+Oneshot replaces that with a tiny `curl` command. You screenshot a region, a command lands on your clipboard, and the agent fetches the image from a local server on your machine. After it's read, the screenshot deletes itself. Nothing is ever saved to disk.
 
-**Clipboard result:**
+---
+
+## Getting Started
+
+### 1. Take a screenshot
+
+Press **Ctrl + Shift + S** and drag to select a region of your screen.
+
+### 2. Annotate (optional)
+
+A text field appears after capture. Type a short note to tell the agent what to look at. The text gets burned into the bottom of the image so it travels with the screenshot.
+
+### 3. Paste into your agent
+
+A `curl` command is already on your clipboard:
+
 ```
 curl -s -o /tmp/shot-A1B2C3D4.png http://localhost:9853/s/A1B2C3D4-...-E5F6.png
 ```
 
-**What the agent does:**
-```bash
-$ curl -s -o /tmp/shot-A1B2C3D4.png http://localhost:9853/s/A1B2C3D4-...-E5F6.png
-$ # Reads /tmp/shot-A1B2C3D4.png → sees your screenshot
+You don't need to understand or edit this. Just paste it. The agent runs the command, reads the image from `localhost`, and the screenshot auto-expires. A second fetch returns `410 Gone`.
 
-$ curl -s http://localhost:9853/s/A1B2C3D4-...-E5F6.png
-> Gone  (HTTP 410)
-```
+Why `curl` instead of a URL? AI agents can't open `localhost` in a browser, but they *can* run shell commands.
 
-### Multiple Screenshots
+---
 
-Keep pressing the shortcut — each capture adds to a batch. The clipboard updates with a markdown table after every capture:
+## Batch Mode
+
+Keep pressing **Ctrl + Shift + S** to capture additional regions. Each capture adds to a batch, and your clipboard updates with a markdown table:
 
 | Screenshot | Fetch |
 |------------|-------|
@@ -42,23 +52,33 @@ Keep pressing the shortcut — each capture adds to a batch. The clipboard updat
 | shot-2 | `curl -s -o /tmp/shot-E5F6G7H8.png http://localhost:9853/s/...` |
 | shot-3 | `curl -s -o /tmp/shot-I9J0K1L2.png http://localhost:9853/s/...` |
 
-Paste the table into your agent and it fetches all screenshots at once. The batch auto-clears after 30 seconds of inactivity, or clear it from the menu bar.
+Paste the table once and the agent fetches every image.
 
-### Annotations & Capture Management
+The batch clears after 30 seconds of inactivity. You can also manage it from the menu bar icon, where you can preview thumbnails, edit annotations, remove individual shots, or see which ones have been read vs. still pending.
 
-After selecting a region, a prompt appears to add a note — tell the AI what to look at. The annotation gets burned into the bottom of the image so it travels with the screenshot.
+---
 
-From the menu bar, you can see thumbnail previews of recent captures, edit annotations, or remove individual shots before pasting. Captures auto-clear once the AI reads them.
+## Expiry
 
-### Expiry
+| State | Lifetime | What happens |
+|-------|----------|-------------|
+| Unread | 10 minutes | Screenshot expires and is removed from memory |
+| Read | 60 seconds after first fetch | Screenshot deletes itself |
+| App quit | Immediate | Everything in memory is wiped |
 
-- After the agent reads a screenshot, it stays available for **60 seconds** (configurable), then deletes.
-- Unread screenshots expire after **10 minutes** (configurable).
-- Nothing is ever written to disk. When the app quits, everything is gone.
+All timers are configurable in [Settings](#settings).
+
+---
 
 ## Install
 
-Requires Xcode 16+ and macOS 14 (Sonoma) or later.
+### Mac App Store
+
+Oneshot is currently in App Store review. A download link will appear here once it's approved.
+
+### Build from Source
+
+You'll need a Mac running **macOS 14 Sonoma** or later, with **Xcode 16+** installed.
 
 ```bash
 git clone https://github.com/Kalypsokichu-code/shots-for-agents.git
@@ -66,42 +86,58 @@ cd shots-for-agents
 open ShotsForAgents.xcodeproj
 ```
 
-Build and run from Xcode (`Cmd+R`). First launch will ask for **Screen Recording** permission — grant it in System Settings.
+Press **Cmd + R** in Xcode to build and run.
 
-If you modify `project.yml`, regenerate the Xcode project with:
+On first launch, macOS will prompt for **Screen Recording** permission. Grant it in **System Settings > Privacy & Security > Screen Recording**.
+
+<details>
+<summary>Regenerating the Xcode project</summary>
+
+If you modify `project.yml`, regenerate the project file:
 
 ```bash
-brew install xcodegen  # if not installed
+brew install xcodegen  # if not already installed
 xcodegen generate
 ```
 
+</details>
+
+---
+
 ## Settings
 
-Click the menu bar icon → **Settings** to configure:
+Click the menu bar icon and choose **Settings**.
 
 | Setting | Default | Description |
-|---|---|---|
-| Capture shortcut | `Ctrl+Shift+S` | Global hotkey to trigger capture |
-| Port | `9853` | Localhost port for the image server (restart to apply) |
-| Unread expire | `10 min` | How long unread screenshots stay in memory |
-| Keep after read | `60 sec` | How long screenshots persist after first fetch |
-| Launch at login | Off | Start automatically on login |
+|---------|---------|-------------|
+| Capture shortcut | Ctrl + Shift + S | Global keyboard shortcut for capture |
+| Port | 9853 | Localhost port for the image server (restart required to change) |
+| Unread expiry | 10 min | Time before an unread screenshot is removed |
+| Keep after read | 60 sec | Time a screenshot persists after the agent fetches it |
+| Launch at login | Off | Start Oneshot automatically when you log in |
 
-## Architecture
+<details>
+<summary>Architecture and dependencies</summary>
 
-- **ScreenCaptureKit** — Captures the display. Freeze-and-select: captures the full screen, shows it as a frozen overlay, user drags to select a region.
-- **FlyingFox** — Lightweight async Swift HTTP server. Serves screenshots on localhost.
-- **KeyboardShortcuts** — Global hotkey registration without requiring Accessibility permissions.
-- **In-memory store** — Screenshots are never written to disk. An actor-based store handles concurrent access.
+### How it works under the hood
 
-Only permission required is **Screen Recording**.
+- **ScreenCaptureKit** captures the full display, freezes it as an overlay, and lets you drag to select a region.
+- **FlyingFox** runs a lightweight async HTTP server on localhost to serve screenshots.
+- **KeyboardShortcuts** registers the global hotkey without requiring Accessibility permissions.
+- An **actor-based in-memory store** holds screenshots. Nothing touches disk. Concurrent access is handled safely.
 
-## Dependencies
+The only macOS permission required is **Screen Recording**.
 
-| Package | Purpose |
-|---|---|
+### Dependencies
+
+| Package | Role |
+|---------|------|
 | [FlyingFox](https://github.com/swhitty/FlyingFox) | Async HTTP server |
-| [KeyboardShortcuts](https://github.com/sindresorhus/KeyboardShortcuts) | Global hotkey |
+| [KeyboardShortcuts](https://github.com/sindresorhus/KeyboardShortcuts) | Global hotkey registration |
+
+</details>
+
+---
 
 ## License
 
