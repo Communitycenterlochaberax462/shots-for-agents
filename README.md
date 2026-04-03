@@ -6,9 +6,7 @@ A Mac menu bar utility that turns screenshots into one-time localhost URLs you c
 
 ## The Problem
 
-Working with AI agents means taking a lot of screenshots — sharing UI bugs, showing designs, pointing at errors on screen. Every one of those screenshots lands on your desktop or downloads folder and stays there forever. You end up with hundreds of temp screenshots that were only ever meant to be seen once by an AI.
-
-macOS has no concept of a "temporary screenshot." Every capture is permanent until you manually clean it up.
+AI agents can run shell commands but can't see your screen. Sharing screenshots means pasting large base64 images into chat and typing out what to look at — burning tokens and cluttering context. Sharing multiple screenshots makes it worse.
 
 ## How It Works
 
