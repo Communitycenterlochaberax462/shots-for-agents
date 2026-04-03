@@ -10,30 +10,33 @@ macOS has no concept of a "temporary screenshot." Every capture is permanent unt
 
 ## How It Works
 
-Shots for Agents sits in your menu bar. Press a shortcut, select a region, and get a URL on your clipboard. Paste it into your AI agent. The screenshot self-destructs after the agent reads it. No file saved. No cleanup needed.
+Shots for Agents sits in your menu bar. Press a shortcut, select a region, and get a curl command on your clipboard. Paste it into your AI agent. The screenshot self-destructs after the agent reads it. No file saved. No cleanup needed.
+
+### Single Screenshot
 
 ```
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐     ┌───────────┐
-│  ⌃⇧S        │ ──▶ │  Select      │ ──▶ │  URL copied  │ ──▶ │  Agent    │
-│  Shortcut   │     │  Region      │     │  to clipboard│     │  reads it │
-└─────────────┘     └──────────────┘     └─────────────┘     └─────┬─────┘
-                                                                    │
-                                                              ┌─────▼─────┐
-                                                              │  Gone.    │
-                                                              │  410.     │
-                                                              └───────────┘
+⌃⇧S → Select Region → curl command copied → Paste into agent → Agent reads it → Gone. 410.
 ```
 
-1. **Capture** — Press `Ctrl+Shift+S`. The screen freezes and you drag to select a region.
-2. **Serve** — The screenshot is held in memory and served at `http://localhost:9853/s/<id>.png`.
-3. **Copy** — A curl command is copied to your clipboard, ready to paste into any AI agent.
-4. **Expire** — After the agent reads it, the image stays available for 60 seconds (configurable), then deletes. Unread screenshots expire after 10 minutes.
+**Clipboard result:**
+```
+curl -s -o /tmp/shot-A1B2C3D4.png http://localhost:9853/s/A1B2C3D4-...-E5F6.png
+```
 
-Nothing is ever written to disk. When the app quits, everything is gone.
+**What the agent does:**
+```bash
+$ curl -s -o /tmp/shot-A1B2C3D4.png http://localhost:9853/s/A1B2C3D4-...-E5F6.png
+$ # Reads /tmp/shot-A1B2C3D4.png → sees your screenshot
 
-## Batch Capture
+$ curl -s http://localhost:9853/s/A1B2C3D4-...-E5F6.png
+> Gone  (HTTP 410)
+```
 
-Need to share multiple screenshots? Just keep pressing the shortcut. Each capture adds to a batch and the clipboard updates automatically with a markdown table:
+### Multiple Screenshots
+
+Keep pressing the shortcut — each capture adds to a batch. The clipboard updates with a markdown table after every capture:
+
+**Clipboard result:**
 
 | Screenshot | Fetch |
 |------------|-------|
@@ -41,9 +44,16 @@ Need to share multiple screenshots? Just keep pressing the shortcut. Each captur
 | shot-2 | `curl -s -o /tmp/shot-E5F6G7H8.png http://localhost:9853/s/...` |
 | shot-3 | `curl -s -o /tmp/shot-I9J0K1L2.png http://localhost:9853/s/...` |
 
-Paste the table into your agent and it fetches all screenshots at once. The batch auto-clears after 30 seconds of inactivity, or you can clear it from the menu bar. The menu bar icon shows the current batch count.
+Paste the table into your agent and it fetches all screenshots at once. The batch auto-clears after 30 seconds of inactivity, or clear it from the menu bar. The menu bar icon shows the current batch count.
 
-A single screenshot still copies just the curl command — no table overhead.
+### Lifecycle
+
+1. **Capture** — Press `Ctrl+Shift+S`. The screen freezes and you drag to select a region.
+2. **Serve** — The screenshot is held in memory and served at `http://localhost:9853/s/<id>.png`.
+3. **Copy** — A curl command (or markdown table for batches) is copied to your clipboard.
+4. **Expire** — After the agent reads it, the image stays available for 60 seconds (configurable), then deletes. Unread screenshots expire after 10 minutes.
+
+Nothing is ever written to disk. When the app quits, everything is gone.
 
 ## Why curl instead of a URL?
 
