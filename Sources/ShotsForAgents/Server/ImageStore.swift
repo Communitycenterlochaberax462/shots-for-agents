@@ -2,7 +2,7 @@ import Foundation
 
 actor ImageStore {
     struct Entry {
-        let data: Data
+        var data: Data
         let createdAt: Date
         var firstReadAt: Date?
     }
@@ -46,6 +46,20 @@ actor ImageStore {
             if let firstRead = entry.firstReadAt, firstRead < readCutoff { return false }
             return true
         }
+    }
+
+    func remove(_ id: UUID) {
+        entries.removeValue(forKey: id)
+    }
+
+    func replace(_ id: UUID, data: Data) {
+        guard var entry = entries[id] else { return }
+        entry.data = data
+        entries[id] = entry
+    }
+
+    func activeIDs() -> Set<UUID> {
+        Set(entries.keys)
     }
 
     func pendingCount() -> Int {

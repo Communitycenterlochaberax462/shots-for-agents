@@ -7,7 +7,7 @@ final class AnnotationWindow: NSWindow {
     private var didComplete = false
     nonisolated(unsafe) private var escMonitor: Any?
 
-    init(anchorPoint: NSPoint, onComplete: @escaping (String?) -> Void) {
+    init(anchorPoint: NSPoint, initialText: String? = nil, onComplete: @escaping (String?) -> Void) {
         self.onComplete = onComplete
 
         let width: CGFloat = 360
@@ -33,7 +33,8 @@ final class AnnotationWindow: NSWindow {
         hasShadow = true
         isReleasedWhenClosed = false
 
-        let view = AnnotationView { [weak self] text in
+        let isEditing = initialText != nil
+        let view = AnnotationView(initialText: initialText ?? "", isEditing: isEditing) { [weak self] text in
             self?.complete(text)
         }
         contentView = NSHostingView(rootView: view)
@@ -75,17 +76,24 @@ final class AnnotationWindow: NSWindow {
 
 private struct AnnotationView: View {
     let onComplete: (String?) -> Void
-    @State private var text = ""
+    let isEditing: Bool
+    @State private var text: String
     @FocusState private var isFocused: Bool
+
+    init(initialText: String = "", isEditing: Bool = false, onComplete: @escaping (String?) -> Void) {
+        self.onComplete = onComplete
+        self.isEditing = isEditing
+        _text = State(initialValue: initialText)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
             // Header
             HStack {
-                Image(systemName: "text.bubble")
+                Image(systemName: isEditing ? "pencil" : "text.bubble")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(.secondary)
-                Text("Add a note")
+                Text(isEditing ? "Edit note" : "Add a note")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(.primary)
                 Spacer()
