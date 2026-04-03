@@ -26,22 +26,21 @@ struct SettingsView: View {
 
                 Section("Server") {
                     LabeledContent("Port") {
-                        HStack(spacing: 6) {
-                            TextField("Port", text: $portText)
-                                .frame(width: 52)
-                                .textFieldStyle(.roundedBorder)
-                                .font(.system(.body, design: .monospaced))
-                                .multilineTextAlignment(.trailing)
-                                .onSubmit { applyPort() }
-                                .onChange(of: portText) { _, newValue in
-                                    portChanged = (Int(newValue) ?? port) != port
-                                }
-                            if portChanged {
-                                Text("restart to apply")
-                                    .font(.caption)
-                                    .foregroundStyle(.orange)
+                        TextField("", text: $portText)
+                            .frame(width: 60)
+                            .textFieldStyle(.plain)
+                            .font(.system(.body, design: .monospaced))
+                            .multilineTextAlignment(.trailing)
+                            .accessibilityLabel("Port")
+                            .onSubmit { applyPort() }
+                            .onChange(of: portText) { _, newValue in
+                                portChanged = (Int(newValue) ?? port) != port
                             }
-                        }
+                    }
+                    if portChanged {
+                        Text("Restart to apply new port")
+                            .font(.caption)
+                            .foregroundStyle(.orange)
                     }
 
                     Picker("Unread expire", selection: $ttlMinutes) {
