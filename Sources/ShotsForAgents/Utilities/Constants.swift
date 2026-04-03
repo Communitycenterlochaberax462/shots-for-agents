@@ -7,7 +7,7 @@ enum Constants {
 
     static let defaultPort = 9853
     static let defaultTTLMinutes = 10
-    static let defaultReadWindowSeconds = 60
+    static let defaultReadWindowSeconds = 30
 
     // MARK: - UserDefaults-backed values
 
