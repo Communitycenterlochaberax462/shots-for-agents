@@ -98,19 +98,21 @@ export default function Page() {
           </h1>
 
           <div className="flex flex-wrap gap-3">
+            {/* TODO: Uncomment when App Store listing is live
             <a href="#" className="inline-flex">
               <Button size="lg" className="gap-2">
                 <Desktop size={16} />
                 Download for Mac
               </Button>
             </a>
+            */}
             <a
               href="https://github.com/Kalypsokichu-code/shots-for-agents"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex"
             >
-              <Button variant="outline" size="lg" className="gap-2">
+              <Button size="lg" className="gap-2">
                 <GithubLogo size={16} />
                 GitHub
               </Button>
