@@ -275,11 +275,11 @@ export default function Page() {
 
       {/* Footer */}
       <footer className="border-t border-border/30 px-6 py-10">
-        <div className="mx-auto flex max-w-5xl items-center justify-between">
+        <div className="mx-auto flex max-w-5xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-muted-foreground">
             Built for people who talk to AI all day.
           </p>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
             <a
               href="https://github.com/Kalypsokichu-code/shots-for-agents"
               target="_blank"
@@ -294,8 +294,6 @@ export default function Page() {
             </a>
             <span className="text-border">·</span>
             <span>MIT License</span>
-            <span className="text-border">·</span>
-            <span>macOS 14+</span>
             <span className="text-border">·</span>
             <a
               href="https://www.instagram.com/kalypsodesigns"
