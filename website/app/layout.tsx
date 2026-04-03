@@ -16,11 +16,11 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Shots for Agents — Screenshots that self-destruct",
+  title: "Oneshot — Screenshots that self-destruct",
   description:
     "A Mac menu bar utility that turns screenshots into one-time localhost URLs you can paste into AI agents.",
   openGraph: {
-    title: "Shots for Agents",
+    title: "Oneshot",
     description: "Screenshots that self-destruct after your AI reads them.",
     type: "website",
   },

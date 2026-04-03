@@ -5,15 +5,15 @@
     <key>CFBundleIdentifier</key>
     <string>com.shotsforagents.app</string>
     <key>CFBundleName</key>
-    <string>ShotsForAgents</string>
+    <string>Oneshot</string>
     <key>CFBundleDisplayName</key>
-    <string>ShotsForAgents</string>
+    <string>Oneshot</string>
     <key>CFBundleExecutable</key>
     <string>ShotsForAgents</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>3</string>
     <key>CFBundleShortVersionString</key>
     <string>0.1.0</string>
     <key>LSMinimumSystemVersion</key>
@@ -25,6 +25,6 @@
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.utilities</string>
     <key>NSScreenCaptureUsageDescription</key>
-    <string>ShotsForAgents needs Screen Recording permission to capture screenshots.</string>
+    <string>Oneshot needs Screen Recording permission to capture screenshots.</string>
 </dict>
 </plist>

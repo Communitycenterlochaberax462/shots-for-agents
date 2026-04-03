@@ -1,6 +1,6 @@
-# Shots for Agents
+# Oneshot
 
-![Shots for Agents](social.jpg)
+![Oneshot](social.jpg)
 
 A Mac menu bar utility that turns screenshots into one-time localhost URLs you can paste into AI agents.
 
@@ -12,7 +12,7 @@ macOS has no concept of a "temporary screenshot." Every capture is permanent unt
 
 ## How It Works
 
-Shots for Agents sits in your menu bar. Press a shortcut, select a region, and get a curl command on your clipboard. Curl instead of a URL because AI agents can't fetch localhost with their web tools, but they can run shell commands.
+Oneshot sits in your menu bar. Press a shortcut, select a region, and get a curl command on your clipboard. Curl instead of a URL because AI agents can't fetch localhost with their web tools, but they can run shell commands.
 
 ### Single Screenshot
 

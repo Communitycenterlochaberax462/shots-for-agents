@@ -18,7 +18,7 @@ final class SettingsWindowController {
             backing: .buffered,
             defer: false
         )
-        window.title = "ShotsForAgents Settings"
+        window.title = "Oneshot Settings"
         window.contentView = NSHostingView(rootView: SettingsView())
         window.center()
         window.isReleasedWhenClosed = false

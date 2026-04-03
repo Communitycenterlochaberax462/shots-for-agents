@@ -105,7 +105,7 @@ export function AgentChat() {
           <div className="size-2.5 rounded-full bg-zinc-700" />
         </div>
         <span className="ml-2 text-[11px] text-zinc-500">
-          claude-code — shots-for-agents
+          claude-code — oneshot
         </span>
       </div>
 
