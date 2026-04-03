@@ -27,9 +27,23 @@ Shots for Agents sits in your menu bar. Press a shortcut, select a region, and g
 1. **Capture** — Press `Ctrl+Shift+S`. The screen freezes and you drag to select a region.
 2. **Serve** — The screenshot is held in memory and served at `http://localhost:9853/s/<id>.png`.
 3. **Copy** — A curl command is copied to your clipboard, ready to paste into any AI agent.
-4. **Expire** — After the agent reads it, the image stays available for 60 seconds (configurable), then deletes. Unread screenshots expire after 5 minutes.
+4. **Expire** — After the agent reads it, the image stays available for 60 seconds (configurable), then deletes. Unread screenshots expire after 10 minutes.
 
 Nothing is ever written to disk. When the app quits, everything is gone.
+
+## Batch Capture
+
+Need to share multiple screenshots? Just keep pressing the shortcut. Each capture adds to a batch and the clipboard updates automatically with a markdown table:
+
+| Screenshot | Fetch |
+|------------|-------|
+| shot-1 | `curl -s -o /tmp/shot-A1B2C3D4.png http://localhost:9853/s/...` |
+| shot-2 | `curl -s -o /tmp/shot-E5F6G7H8.png http://localhost:9853/s/...` |
+| shot-3 | `curl -s -o /tmp/shot-I9J0K1L2.png http://localhost:9853/s/...` |
+
+Paste the table into your agent and it fetches all screenshots at once. The batch auto-clears after 30 seconds of inactivity, or you can clear it from the menu bar. The menu bar icon shows the current batch count.
+
+A single screenshot still copies just the curl command — no table overhead.
 
 ## Why curl instead of a URL?
 
@@ -80,14 +94,14 @@ Click the menu bar icon → **Settings** to configure:
 | Setting | Default | Description |
 |---|---|---|
 | Capture shortcut | `Ctrl+Shift+S` | Global hotkey to trigger capture |
-| Port | `9853` | Localhost port for the image server |
-| Unread expire | `5 min` | How long unread screenshots stay in memory |
+| Port | `9853` | Localhost port for the image server (restart to apply) |
+| Unread expire | `10 min` | How long unread screenshots stay in memory |
 | Keep after read | `60 sec` | How long screenshots persist after first fetch |
 | Launch at login | Off | Start automatically on login |
 
 ## Architecture
 
-- **ScreenCaptureKit** — Captures the display using Apple's native framework. No shelling out to `screencapture`, fully sandbox-compatible.
+- **ScreenCaptureKit** — Captures the display using Apple's native framework. Fully sandbox-compatible. Uses a freeze-and-select approach: captures the full screen, shows it as a frozen overlay, and lets you drag to select a region.
 - **FlyingFox** — Lightweight async Swift HTTP server. Serves screenshots on localhost.
 - **KeyboardShortcuts** — Global hotkey registration without requiring Accessibility permissions.
 - **In-memory store** — Screenshots are never written to disk. An actor-based store handles concurrent access from the HTTP server and the main thread.
